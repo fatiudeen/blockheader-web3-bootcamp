@@ -4,12 +4,27 @@ function hashFn(x, y) {
   return sha256(JSON.stringify({ x, y }));
 }
 
-let txn = ["nigga", "og", "bruv", "my man", "chief"];
+let txn = ["fghj", "vbnm", "jklop", "tyuio", "wertyu"];
 
 function getRootHash(arr) {
-  if (arr.length % 2 === 0) {
-    //even
+  let len = arr.length;
+  let lastVal;
+
+  if (arr.length % 2 !== 0) {
+    len = arr.length - 1;
+    lastVal = arr.at(-1);
   }
+
+  const newHashes = [];
+  for (let i = 0; i < len; i += 2) {
+    newHashes.push(hashFn(arr[i], arr[i + 1]));
+  }
+
+  if (lastVal) {
+    newHashes.push(hashFn(lastVal, lastVal));
+  }
+
+  return newHashes.length === 1 ? newHashes[0] : getRootHash(newHashes);
 }
 
-console.log(hashFn("boy", "girl"));
+console.log(getRootHash(txn));
